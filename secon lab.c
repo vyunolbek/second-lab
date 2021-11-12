@@ -7,6 +7,16 @@
 
 const double RAND_MAX_F = RAND_MAX;
 
+int stringCount(FILE* strC) {
+    int result = 0;
+    while (!ferror(strC) && !feof(strC)) {
+        if (fgetc(strC) == '\n')
+            ++result;
+    }
+    rewind(strC);
+    return result;
+}
+
 void bubbleSort(double* arrbs, int size)
 {
     for (int i = 0; i < size; i++)
@@ -69,48 +79,88 @@ void insertionSort(double* mas, int size)
 int main()
 {
     srand(time(NULL));
-    FILE* file = fopen("file.txt", "w");
-    int size;
+    FILE* file = fopen("../first prog/file.txt", "r");
+    int size, checkbox = 0, sortCheck = 0;
     double startTime, endTime;
-    printf("Введите кол-во элементов в массиве: ");
-    scanf_s("%d", &size);
-    file = fopen("../first prog/file.txt", "r");
-
+    size = stringCount(file);
     double* b, * a;
 
     a = (double*)malloc(size * sizeof(double));
     b = (double*)malloc(size * sizeof(double));
 
     for (int i = 0; i < size; i++)
+        fscanf(file, "%lf", &a[i]);
+
+    memcpy(b, a, sizeof(double) * size);
+
+    do
     {
-        fscanf(file, "%lf", a + i);
-    }
+        printf("Выберите нужное действие:\n1. Печать\n2. Сортировка\n3. Сброс\n4. Выход\nВыбор:");
+        do
+        {
+            scanf("%d", &checkbox);
+            if (checkbox < 1 || checkbox > 4)
+            {
+                printf("Вы неверно ввели номер. Введите снова\nВыбор:");
+            }
+        } while (checkbox < 1 || checkbox > 4);
 
-    memcpy(b, a, sizeof(double) * size);
+        if (checkbox == 1)
+        {
+            for (int i = 0; i < size; i++)
+                printf("a[%d] = %lf\n", i, a[i]);
+            printf("\n");
+        }
 
-    // Bubble Sort
+        else if (checkbox == 2)
+        {
+            printf("\nВыберите сортировку:\n1. Пузырьком\n2. Вставками\n3. Быстрая\nВыбор:");
+            do
+            {
+                scanf("%d", &sortCheck);
+            } while (sortCheck < 1 || sortCheck > 3);
 
-    startTime = clock();
-    bubbleSort(b, size);
-    endTime = clock();
-    printf("\nrun time %lf\n", (endTime - startTime) / 1000);
-    printf("bubblesort is complete\n");
-    memcpy(b, a, sizeof(double) * size);
+            if (sortCheck == 1)
+            {
+                startTime = clock();
+                bubbleSort(b, size);
+                endTime = clock();
+                printf("\nВремя выполнения %lf\n", (endTime - startTime) / 1000);
+                printf("Пузырьковая сортировка завершена\n\n");
+                memcpy(b, a, sizeof(double) * size);
+            }
+            else if (sortCheck == 2)
+            {
+                startTime = clock();
+                insertionSort(b, size);
+                endTime = clock();
+                printf("\nВремя выполнения %lf\n", (endTime - startTime) / 1000);
+                printf("Сортировка вставками завершена\n\n");
+                memcpy(b, a, sizeof(double) * size);
+            }
+            else
+            {
+                startTime = clock();
+                quickSort(b, 0, size - 1);
+                endTime = clock();
+                printf("\nВремя выполнения %lf\n", (endTime - startTime) / 1000);
+                printf("Быстрая сортировка завершена\n\n");
+                memcpy(b, a, sizeof(double) * size);
+            }
+        }
 
-    // Quick sort
+        else if (checkbox == 3)
+        {
+            printf("\n");
+        }
 
-    startTime = clock();
-    quickSort(b, 0, size - 1);
-    endTime = clock();
-    printf("\nrun time %lf\n", (endTime - startTime) / 1000);
-    printf("quick sort is complete\n");
-    memcpy(b, a, sizeof(double) * size);
-
-    // Insertion sort
-
-    startTime = clock();
-    insertionSort(b, size);
-    endTime = clock();
-    printf("\nrun time %lf\n", (endTime - startTime) / 1000);
-    printf("insertion sort is complete\n");
+        else
+        {
+            printf("\nВы вышли из программы\n");
+            return 0;
+        }
+    } while (checkbox == 3 || checkbox == 1 || checkbox == 2 || checkbox == 4);
+    fclose(file);
+    free(a);
+    free(b);
 }
