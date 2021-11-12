@@ -101,7 +101,7 @@ int main()
             scanf("%d", &checkbox);
             if (checkbox < 1 || checkbox > 4)
             {
-                printf("Вы неверно ввели номер. Введите снова\nВыбор:");
+                printf("\nВы неверно ввели номер. Введите снова\n\nВыбор:");
             }
         } while (checkbox < 1 || checkbox > 4);
 
@@ -118,6 +118,8 @@ int main()
             do
             {
                 scanf("%d", &sortCheck);
+                if (sortCheck < 1 || sortCheck > 3)
+                    printf("\nВы неверно ввели номер. Введите снова\n\nВыбор:");
             } while (sortCheck < 1 || sortCheck > 3);
 
             if (sortCheck == 1)
