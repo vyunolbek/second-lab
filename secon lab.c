@@ -12,7 +12,7 @@ int stringCount(FILE* strC) {
     int result = 0;
     while (!ferror(strC) && !feof(strC)) {
         if (fgetc(strC) == '\n')
-            ++result;
+            result++;
     }
     rewind(strC);
     return result;
@@ -84,7 +84,6 @@ void insertionSort(double* mas, int size)
 
 int main()
 {
-    
     srand(time(NULL));
     FILE* file = fopen("../first prog/file.txt", "r");
     int size, checkbox = 0, sortCheck = 0;
@@ -117,8 +116,9 @@ int main()
 
         if (checkbox == 1)
         {
+            clrscr();
             for (int i = 0; i < size; i++)
-                printf_s("a[%d] = %lf\n", i, a[i]);
+                printf_s("a[%d] = %lf\n", i, b[i]);
             printf_s("\n");
         }
 
@@ -141,7 +141,6 @@ int main()
                 endTime = clock();
                 printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
                 printf_s("Пузырьковая сортировка завершена\n\n");
-                memcpy(b, a, sizeof(double) * size);
             }
             else if (sortCheck == 2)
             {
@@ -151,7 +150,6 @@ int main()
                 endTime = clock();
                 printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
                 printf_s("Сортировка вставками завершена\n\n");
-                memcpy(b, a, sizeof(double) * size);
             }
             else if (sortCheck == 3)
             {
@@ -161,7 +159,6 @@ int main()
                 endTime = clock();
                 printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
                 printf_s("Быстрая сортировка завершена\n\n");
-                memcpy(b, a, sizeof(double) * size);
             }
             else
             {
@@ -172,6 +169,8 @@ int main()
         else if (checkbox == 3)
         {
             clrscr();
+            memcpy(b, a, sizeof(double) * size);
+            printf_s("Сортировка сброшена\n\n");
         }
 
         else
