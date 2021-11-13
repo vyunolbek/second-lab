@@ -7,18 +7,31 @@
 
 const double RAND_MAX_F = RAND_MAX;
 
+void clrscr()
+{
+    system("@cls||clear");
+}
+
 int main()
 {
     srand(time(NULL));
     FILE* file = fopen("file.txt", "w");
     int size, max, min;
 
-    printf("Введите кол-во элементов в массиве: ");
-    scanf_s("%d", &size);
-    printf("Введите минимальный элемент: ");
-    scanf_s("%d", &min);
-    printf("Введите максимальный элемент: ");
-    scanf_s("%d", &max);
+    do
+    {
+        printf("Введите кол-во элементов в массиве: ");
+        scanf_s("%d", &size);
+        printf("Введите минимальный элемент: ");
+        scanf_s("%d", &min);
+        printf("Введите максимальный элемент: ");
+        scanf_s("%d", &max);
+        if (size <= 0 || min > max)
+        {
+            clrscr();
+            printf_s("Вы неверно ввели данные. Введите снова\n\n");
+        }
+    } while (size <= 0 || min > max);
 
     for (int i = 0; i < size; i++)
     {
