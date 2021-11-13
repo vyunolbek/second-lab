@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <conio.h>
 
 const double RAND_MAX_F = RAND_MAX;
 
@@ -15,6 +16,11 @@ int stringCount(FILE* strC) {
     }
     rewind(strC);
     return result;
+}
+
+void clrscr()
+{
+    system("@cls||clear");
 }
 
 void bubbleSort(double* arrbs, int size)
@@ -78,87 +84,99 @@ void insertionSort(double* mas, int size)
 
 int main()
 {
+    
     srand(time(NULL));
     FILE* file = fopen("../first prog/file.txt", "r");
     int size, checkbox = 0, sortCheck = 0;
     double startTime, endTime;
+    printf_s("Чтение из файла\n");
     size = stringCount(file);
     double* b, * a;
 
     a = (double*)malloc(size * sizeof(double));
     b = (double*)malloc(size * sizeof(double));
 
-    for (int i = 0; i < size; i++)
-        fscanf(file, "%lf", &a[i]);
 
+    for (int i = 0; i < size; i++)
+        fscanf_s(file, "%lf", &a[i]);
+
+    clrscr();
     memcpy(b, a, sizeof(double) * size);
 
     do
     {
-        printf("Выберите нужное действие:\n1. Печать\n2. Сортировка\n3. Сброс\n4. Выход\nВыбор:");
+        printf_s("Выберите нужное действие:\n1. Печать\n2. Сортировка\n3. Сброс\n4. Выход\nВыбор:");
         do
         {
-            scanf("%d", &checkbox);
+            scanf_s("%d", &checkbox);
             if (checkbox < 1 || checkbox > 4)
             {
-                printf("\nВы неверно ввели номер. Введите снова\n\nВыбор:");
+                printf_s("\nВы неверно ввели номер. Введите снова\n\nВыбор:");
             }
         } while (checkbox < 1 || checkbox > 4);
 
         if (checkbox == 1)
         {
             for (int i = 0; i < size; i++)
-                printf("a[%d] = %lf\n", i, a[i]);
-            printf("\n");
+                printf_s("a[%d] = %lf\n", i, a[i]);
+            printf_s("\n");
         }
 
         else if (checkbox == 2)
         {
-            printf("\nВыберите сортировку:\n1. Пузырьком\n2. Вставками\n3. Быстрая\nВыбор:");
+            clrscr();
+            printf_s("Выберите сортировку:\n1. Пузырьком\n2. Вставками\n3. Быстрая\n-----------\n4. Назад в меню\nВыбор:");
             do
             {
-                scanf("%d", &sortCheck);
-                if (sortCheck < 1 || sortCheck > 3)
-                    printf("\nВы неверно ввели номер. Введите снова\n\nВыбор:");
-            } while (sortCheck < 1 || sortCheck > 3);
+                scanf_s("%d", &sortCheck);
+                if (sortCheck < 1 || sortCheck > 4)
+                    printf_s("\nВы неверно ввели номер. Введите снова\n\nВыбор:");
+            } while (sortCheck < 1 || sortCheck > 4);
 
             if (sortCheck == 1)
             {
+                clrscr();
                 startTime = clock();
                 bubbleSort(b, size);
                 endTime = clock();
-                printf("\nВремя выполнения %lf\n", (endTime - startTime) / 1000);
-                printf("Пузырьковая сортировка завершена\n\n");
+                printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
+                printf_s("Пузырьковая сортировка завершена\n\n");
                 memcpy(b, a, sizeof(double) * size);
             }
             else if (sortCheck == 2)
             {
+                clrscr();
                 startTime = clock();
                 insertionSort(b, size);
                 endTime = clock();
-                printf("\nВремя выполнения %lf\n", (endTime - startTime) / 1000);
-                printf("Сортировка вставками завершена\n\n");
+                printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
+                printf_s("Сортировка вставками завершена\n\n");
+                memcpy(b, a, sizeof(double) * size);
+            }
+            else if (sortCheck == 3)
+            {
+                clrscr();
+                startTime = clock();
+                quickSort(b, 0, size - 1);
+                endTime = clock();
+                printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
+                printf_s("Быстрая сортировка завершена\n\n");
                 memcpy(b, a, sizeof(double) * size);
             }
             else
             {
-                startTime = clock();
-                quickSort(b, 0, size - 1);
-                endTime = clock();
-                printf("\nВремя выполнения %lf\n", (endTime - startTime) / 1000);
-                printf("Быстрая сортировка завершена\n\n");
-                memcpy(b, a, sizeof(double) * size);
+                clrscr();
             }
         }
 
         else if (checkbox == 3)
         {
-            printf("\n");
+            clrscr();
         }
 
         else
         {
-            printf("\nВы вышли из программы\n");
+            printf_s("\nВы вышли из программы\n");
             return 0;
         }
     } while (checkbox == 3 || checkbox == 1 || checkbox == 2 || checkbox == 4);
