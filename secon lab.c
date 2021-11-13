@@ -88,13 +88,15 @@ int main()
     FILE* file = fopen("../first prog/file.txt", "r");
     int size, checkbox = 0, sortCheck = 0;
     double startTime, endTime;
-    printf_s("Чтение из файла\n");
+    printf_s("Чтение из файла...\n");
     size = stringCount(file);
     double* b, * a;
 
     a = (double*)malloc(size * sizeof(double));
     b = (double*)malloc(size * sizeof(double));
 
+    if (a == 0 || b == 0)
+        return 1;
 
     for (int i = 0; i < size; i++)
         fscanf_s(file, "%lf", &a[i]);
