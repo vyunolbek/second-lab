@@ -6,6 +6,7 @@
 #include <string.h>
 #include <conio.h>
 #include <locale.h>
+#include <math.h>
 
 const double RAND_MAX_F = RAND_MAX;
 
@@ -83,13 +84,13 @@ void insertionSort(double* mas, int size)
     }
 }
 
-int main()
+int main(int argc, char* argv[])  
 {
     setlocale(LC_ALL, "Russian");
     srand(time(NULL));
     FILE* file = fopen("../first/file.txt", "r");
-    int size, checkbox = 0, sortCheck = 0;
-    double startTime, endTime;
+    int size, checkbox = 0, sortCheck = 0, norma = 0, geld = 0;
+    double startTime, endTime, vichisl = 0;
     printf_s("Чтение из файла...\n");
     size = stringCount(file);
     double* b, * a;
@@ -106,18 +107,46 @@ int main()
     clrscr();
     memcpy(b, a, sizeof(double) * size);
 
+    if (argc > 1)
+    {
+        if (strcmp(argv[1], "bubble") == 0)
+        {
+            startTime = clock();
+            bubbleSort(b, size);
+            endTime = clock();
+            printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
+            printf_s("Пузырьковая сортировка завершена\n\n");
+        }
+        else if (strcmp(argv[1], "insertion") == 0)
+        {
+            startTime = clock();
+            insertionSort(b, size);
+            endTime = clock();
+            printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
+            printf_s("Сортировка вставками завершена\n\n");
+        }
+        else if (strcmp(argv[1], "quick") == 0)
+        {
+            startTime = clock();
+            quickSort(b, 0, size - 1);
+            endTime = clock();
+            printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
+            printf_s("Быстрая сортировка завершена\n\n");
+        }
+        return 0;
+    }
+
     do
     {
-        printf_s("Выберите нужное действие:\n1. Печать\n2. Сортировка\n3. Сброс\n4. Выход\nВыбор:");
+        printf_s("Выберите нужное действие:\n1. Печать\n2. Сортировка\n3. Сброс\n4. Норма вектора\n5. Выход\nВыбор:");
         do
         {
             scanf_s("%d", &checkbox);
-            if (checkbox < 1 || checkbox > 4)
+            if (checkbox < 1 || checkbox > 5)
             {
                 printf_s("\nВы неверно ввели номер. Введите снова\n\nВыбор:");
             }
-        } while (checkbox < 1 || checkbox > 4);
-
+        } while (checkbox < 1 || checkbox > 5);
         if (checkbox == 1)
         {
             clrscr();
@@ -125,7 +154,6 @@ int main()
                 printf_s("a[%d] = %lf\n", i, b[i]);
             printf_s("\n");
         }
-
         else if (checkbox == 2)
         {
             clrscr();
@@ -136,53 +164,99 @@ int main()
                 if (sortCheck < 1 || sortCheck > 4)
                     printf_s("\nВы неверно ввели номер. Введите снова\n\nВыбор:");
             } while (sortCheck < 1 || sortCheck > 4);
-
-            if (sortCheck == 1)
+            switch (sortCheck)
             {
-                clrscr();
-                startTime = clock();
-                bubbleSort(b, size);
-                endTime = clock();
-                printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
-                printf_s("Пузырьковая сортировка завершена\n\n");
-            }
-            else if (sortCheck == 2)
-            {
-                clrscr();
-                startTime = clock();
-                insertionSort(b, size);
-                endTime = clock();
-                printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
-                printf_s("Сортировка вставками завершена\n\n");
-            }
-            else if (sortCheck == 3)
-            {
-                clrscr();
-                startTime = clock();
-                quickSort(b, 0, size - 1);
-                endTime = clock();
-                printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
-                printf_s("Быстрая сортировка завершена\n\n");
-            }
-            else
-            {
-                clrscr();
+                case 1:
+                    clrscr();
+                    startTime = clock();
+                    bubbleSort(b, size);
+                    endTime = clock();
+                    printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
+                    printf_s("Пузырьковая сортировка завершена\n\n");
+                    break;
+                case 2:
+                    clrscr();
+                    startTime = clock();
+                    insertionSort(b, size);
+                    endTime = clock();
+                    printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
+                    printf_s("Сортировка вставками завершена\n\n");
+                    break;
+                case 3:
+                    clrscr();
+                    startTime = clock();
+                    quickSort(b, 0, size - 1);
+                    endTime = clock();
+                    printf_s("Время выполнения %lf\n", (endTime - startTime) / 1000);
+                    printf_s("Быстрая сортировка завершена\n\n");
+                    break;
+                default:
+                    clrscr();
+                    break;
             }
         }
-
         else if (checkbox == 3)
         {
             clrscr();
             memcpy(b, a, sizeof(double) * size);
             printf_s("Сортировка сброшена\n\n");
         }
-
+        else if (checkbox == 4)
+        {
+            clrscr();
+            printf_s("Введите норму вектора (0 если бесконечная, -1 если нормировка массива, -2 если Гёльдерова):");
+            scanf_s("%d", &norma);
+            if (norma == 1)
+            {
+                for (int k = 0; k < size; k++)
+                {
+                    vichisl += fabs(pow(b[k], 1));
+                }
+                printf_s("\nНорма вектора = %lf\n\n", pow(vichisl, (1 / 1)));
+            }
+            else if (norma == 2)
+            {
+                for (int k = 0; k < size; k++)
+                {
+                    vichisl += fabs(pow(b[k], 2));
+                }
+                printf_s("\nНорма вектора = %lf\n\n", pow(vichisl, (1 / 2)));
+            }
+            else if(norma == 0)
+            {
+                quickSort(b, 0, size - 1);
+                vichisl = fabs(b[size - 1]);
+                printf("\nНорма вектора = %lf\n\n", vichisl);
+            }
+            else if (norma == -1)
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    vichisl += fabs(pow(b[i], 2));
+                }
+                for (int i = 0; i < size; i++)
+                {
+                    a[i] = a[i] / pow(vichisl, 1 / (double)2);
+                    printf("a[%d] = %lf\n", i, a[i]);
+                }
+            }
+            else if (norma == -2)
+            {
+                printf_s("\nВведите норму:");
+                scanf_s("%d", &geld);
+                for (int k = 0; k < size; k++)
+                {
+                    vichisl += fabs(pow(b[k], geld));
+                }
+                printf_s("\nНорма вектора = %lf\n\n", pow(vichisl, (1 / (double)geld)));
+            }
+        }
         else
         {
             printf_s("\nВы вышли из программы\n");
             return 0;
         }
-    } while (checkbox == 3 || checkbox == 1 || checkbox == 2 || checkbox == 4);
+    } while (checkbox == 3 || checkbox == 1 || checkbox == 2 || checkbox == 4 || checkbox == 5);
     fclose(file);
     free(a);
     free(b);
